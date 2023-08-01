@@ -11,6 +11,7 @@ import com.example.dslist.repositories.GameRepository;
 import com.example.dslist.dto.GameDto;
 import com.example.dslist.dto.GameMinDto;
 import com.example.dslist.entities.Game;
+import com.example.dslist.projections.GameMinProjection;
 
 @Service
 public class GameService {
@@ -30,6 +31,12 @@ public class GameService {
         Optional<Game> optional = repository.findById(id);
        
         return new GameDto(optional.get()); 
+    }
+
+    @Transactional(readOnly = true)
+    public List<GameMinDto> findByList(Long id){
+        List<GameMinProjection> games = repository.searchByList(id);
+        return games.stream().map(x -> new GameMinDto(x)).toList(); 
     }
     
 }
